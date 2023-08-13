@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Chat de Elogios</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f2f2f2;
+    }
+    h1 {
+      text-align: center;
+      padding: 20px;
+      color: #2196F3;
+    }
+    #chat-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    #chat {
+      width: 100%;
+      max-width: 600px;
+      flex: 1;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
+    #messages {
+      display: flex;
+      flex-direction: column;
+      max-height: 60vh; /* Ajusta la altura máxima según tus preferencias */
+      overflow-y: scroll;
+      scroll-behavior: smooth; /* Agrega scroll suave para desplazamiento */
+    }
+    .message {
+      margin: 5px 0;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .user-message {
+      background-color: #e0f7fa;
+    }
+    .bot-message {
+      background-color: #f0f0f0;
+    }
+    #input-form {
+      display: flex;
+      align-items: center;
+      position: sticky;
+      bottom: 0;
+      background-color: white;
+      padding: 20px;
+      border-top: 1px solid #ddd;
+    }
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 5px 0 0 5px;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 0 5px 5px 0;
+      background-color: #2196F3;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="chat-container">
+    <h1>Chat de Elogios</h1>
+    <div id="chat">
+      <div id="messages"></div>
+    </div>
+    <form id="input-form">
+      <div id="input-container">
+        <input type="text" id="input" placeholder="Escribe un mensaje..." />
+        <button type="submit" id="send">Enviar</button>
+      </div>
+    </form>
+  </div>
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const messagesDiv = document.getElementById('messages');
+      const inputForm = document.getElementById('input-form');
+      const input = document.getElementById('input');
+  
+      document.addEventListener('DOMContentLoaded', async () => {
+  const messagesDiv = document.getElementById('messages');
+  const inputForm = document.getElementById('input-form');
+  const input = document.getElementById('input');
+
+  // Enviar el mensaje de bienvenida automáticamente al cargar la página
+  const welcomeResponse = await fetch('/chat', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ message: 'welcome' }),
+  });
+
+  const welcomeData = await welcomeResponse.json();
+
+  const botWelcomeMessage = document.createElement('div');
+  botWelcomeMessage.classList.add('message', 'bot-message');
+  botWelcomeMessage.textContent = `Bot: ${welcomeData.reply}`;
+  messagesDiv.appendChild(botWelcomeMessage);
+
+      inputForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+  
+        const message = input.value;
+        input.value = '';
+  
+        const userMessage = document.createElement('div');
+        userMessage.classList.add('message', 'user-message');
+        userMessage.textContent = `Tú: ${message}`;
+        messagesDiv.appendChild(userMessage);
+  
+        const response = await fetch('/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message }),
+        });
+  
+        const data = await response.json();
+  
+        const botMessage = document.createElement('div');
+        botMessage.classList.add('message', 'bot-message');
+        botMessage.textContent = `Bot: ${data.reply}`;
+        messagesDiv.appendChild(botMessage);
+  
+        // Ajustar el desplazamiento para mostrar el mensaje más reciente
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      });
+  
+      // Enviar el mensaje de bienvenida automáticamente al cargar la página
+      const response = await fetch('/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: 'welcome' }), // Usa 'welcome' como mensaje para el mensaje de bienvenida
+      });
+  
+      const data = await response.json();
+  
+      const botMessage = document.createElement('div');
+      botMessage.classList.add('message', 'bot-message');
+      botMessage.textContent = `Bot: ${data.reply}`;
+      messagesDiv.appendChild(botMessage);
+  
+      // Ajustar el desplazamiento para mostrar el mensaje más reciente
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+
+  });
+  </script>
+
+
+</body>
+</html>
