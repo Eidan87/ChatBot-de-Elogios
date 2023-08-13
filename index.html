@@ -97,39 +97,18 @@
       const messagesDiv = document.getElementById('messages');
       const inputForm = document.getElementById('input-form');
       const input = document.getElementById('input');
-  
-      document.addEventListener('DOMContentLoaded', async () => {
-  const messagesDiv = document.getElementById('messages');
-  const inputForm = document.getElementById('input-form');
-  const input = document.getElementById('input');
-
-  // Enviar el mensaje de bienvenida automáticamente al cargar la página
-  const welcomeResponse = await fetch('/chat', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ message: 'welcome' }),
-  });
-
-  const welcomeData = await welcomeResponse.json();
-
-  const botWelcomeMessage = document.createElement('div');
-  botWelcomeMessage.classList.add('message', 'bot-message');
-  botWelcomeMessage.textContent = `Bot: ${welcomeData.reply}`;
-  messagesDiv.appendChild(botWelcomeMessage);
 
       inputForm.addEventListener('submit', async (event) => {
         event.preventDefault();
-  
+
         const message = input.value;
         input.value = '';
-  
+
         const userMessage = document.createElement('div');
         userMessage.classList.add('message', 'user-message');
         userMessage.textContent = `Tú: ${message}`;
         messagesDiv.appendChild(userMessage);
-  
+
         const response = await fetch('/chat', {
           method: 'POST',
           headers: {
@@ -137,41 +116,19 @@
           },
           body: JSON.stringify({ message }),
         });
-  
+
         const data = await response.json();
-  
+
         const botMessage = document.createElement('div');
         botMessage.classList.add('message', 'bot-message');
         botMessage.textContent = `Bot: ${data.reply}`;
         messagesDiv.appendChild(botMessage);
-  
+
         // Ajustar el desplazamiento para mostrar el mensaje más reciente
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
       });
-  
-      // Enviar el mensaje de bienvenida automáticamente al cargar la página
-      const response = await fetch('/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message: 'welcome' }), // Usa 'welcome' como mensaje para el mensaje de bienvenida
-      });
-  
-      const data = await response.json();
-  
-      const botMessage = document.createElement('div');
-      botMessage.classList.add('message', 'bot-message');
-      botMessage.textContent = `Bot: ${data.reply}`;
-      messagesDiv.appendChild(botMessage);
-  
-      // Ajustar el desplazamiento para mostrar el mensaje más reciente
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
-
-  });
   </script>
-
-
 </body>
 </html>
+
